@@ -5,7 +5,9 @@ const bodyParser = require("body-parser"); // this is used to use to make reques
 const app = express(); // this is create an instance for an express
 //const secret = process.env.PAYSTACK_SECRET
 const auth = require("./index");
+const Message = require("./model")
 const PORT = process.env.PORT || 4000;
+
 //server set up ends here
 const MONGOURL = process.env.MONGOURL; // ***This paragraph handle the server connection
 mongoose.connect(MONGOURL, {
@@ -23,20 +25,34 @@ app.use(bodyParser.json()); // this is also a set up for body parser/ this set u
 app.use(express.static(__dirname + "/public")); // all sta
 
 // app.get('/pages/:page',(req, res)=>{
-//   let page = req.params.page
-//   res.render('pages/'+ page, {title:x})
+// let page = req.params.page
+// res.render('pages/'+ page, {title:x})
 // })
-app.get("/pages/contact",(req, res)=>{
-  console.log(req.body);
-});
+// app.get("/pages/home",(req, res)=>{
+//   console.log(req.body);
+// // res.render('pages/home', {title: 'Send'})
+// });
 
 app.get("/pages/home", (req, res) => {
-  res.render("pages/home", { title: "homepage" });
+  //console.log(req.body);
+res.render("pages/home", { title:"home", message:""});
 });
 
-// app.get("/partials/footer", (req, res) => {
-//   console.log(req.body);
-// })
+app.post("/pages/contact", async (req, res) => {
+  let name = req.body.name;
+  let email =req.body.email;
+  let subject =req.body.subjct;
+  let message =req.body.message;
+  
+ const newMessage = new Message({
+  name: name,
+  email: email,
+  subject: subject,
+  message: message,
+ })
+await newMessage.save()
+res.render("pages/home", {title:"home", message:"Thanks for your message" })
+})
 
 app.listen(PORT, () => {
   console.log(`server is live on port ${PORT}`);
