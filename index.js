@@ -4,7 +4,6 @@ const mongoose = require("mongoose"); /// this is used to communicate with mongo
 const bodyParser = require("body-parser"); // this is used to use to make request body available to the server
 const app = express(); // this is create an instance for an express
 //const secret = process.env.PAYSTACK_SECRET
-const auth = require("./index");
 const Message = require("./model")
 const PORT = process.env.PORT || 4000;
 
@@ -33,8 +32,7 @@ app.use(express.static(__dirname + "/public")); // all sta
 // // res.render('pages/home', {title: 'Send'})
 // });
 
-app.get("/pages/home", (req, res) => {
-  //console.log(req.body);
+app.get("/", (req, res) => {
 res.render("pages/home", { title:"home", message:""});
 });
 
